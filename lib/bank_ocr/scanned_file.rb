@@ -9,7 +9,7 @@ module BankOcr
     def initialize(filename)
       @account_numbers = []
       File.readlines(filename).each_slice(4) do |slice|
-        account_numbers << AccountNumber.parse(slice)
+        @account_numbers << AccountNumber.new(slice).to_s
       end
     end
   end

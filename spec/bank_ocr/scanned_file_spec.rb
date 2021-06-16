@@ -2,8 +2,8 @@
 
 RSpec.describe BankOcr::ScannedFile do
   let(:filename) { 'spec/fixtures/use_case_1.txt' }
-  describe '.new' do
-    it 'creates a ScannedFile object with parsed account numbers in it' do
+  describe '#account_numbers' do
+    it 'returns parsed account numbers' do
       fr = BankOcr::ScannedFile.new(filename)
       expect(fr.account_numbers).to be_instance_of(Array)
       expect(fr.account_numbers.size).to eq(11)
