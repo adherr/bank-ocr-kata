@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BankOcr
   class AccountNumber
     ZERO = <<-ZERO
@@ -5,7 +7,6 @@ module BankOcr
 | |
 |_|
 ZERO
-    
     ONE = <<-ONE
    
   |
@@ -52,8 +53,15 @@ EIGHT
  _|
 NINE
 
-    DIGITS = [ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE]
-    # expects an array of strings, each element is a line
+    DIGITS = [ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE].freeze
+
+    private_constant :ZERO, :ONE, :TWO, :THREE, :FOUR, :FIVE, :SIX, :SEVEN, :EIGHT, :NINE, :DIGITS
+
+    # Parses 4 lines from the scanned file into an account number string
+    #
+    # @param lines [Array] from the scanned file, first 3 elements
+    # must include numbers, further elements are ignored
+    # @return [String] parsed account number
     def self.parse(lines)
       chunked = lines[0..2].map do |l|
         l.scan(/.{1,3}/)
@@ -62,7 +70,7 @@ NINE
         assembled = "#{chunked[0][d]}\n#{chunked[1][d]}\n#{chunked[2][d]}\n"
         DIGITS.find_index(assembled).to_s
       end
-      string_digits.join("")
+      string_digits.join('')
     end
   end
 end
