@@ -1,15 +1,13 @@
 # BankOcr
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bank_ocr`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The Bank OCR code kata as a Ruby gem, finished through use case 3.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'bank_ocr'
+gem 'bank_ocr', git: https://github.com/adherr/bank-ocr-kata.git
 ```
 
 And then execute:
@@ -22,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+
 
 ## Development
 
