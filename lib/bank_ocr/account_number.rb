@@ -17,7 +17,7 @@ ONE
     TWO = <<-TWO
  _ 
  _|
-|_
+|_ 
 TWO
     THREE = <<-THREE
  _ 
@@ -57,7 +57,13 @@ NINE
 
     DIGITS = [ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE].freeze
 
-    private_constant :ZERO, :ONE, :TWO, :THREE, :FOUR, :FIVE, :SIX, :SEVEN, :EIGHT, :NINE, :DIGITS
+    STATUS_MAPPING = {
+      parse_error: ' ILL',
+      invalid_checksum: ' ERR',
+      valid: ''
+    }
+
+    private_constant :ZERO, :ONE, :TWO, :THREE, :FOUR, :FIVE, :SIX, :SEVEN, :EIGHT, :NINE, :DIGITS, :STATUS_MAPPING
 
     # Create a new AccountNumber object, parsing the given lines on the way in
     #
@@ -69,8 +75,16 @@ NINE
       @valid = verify_checksum
     end
 
+    # String representation of the account number
     def to_s
-      parsed_array.map(&:to_s).join('')
+      parsed_array.map { |digit| digit.nil? ? '?' : digit }
+                  .map(&:to_s)
+                  .join('')
+    end
+
+    # String representation with status appended
+    def to_file
+      to_s + STATUS_MAPPING[valid]
     end
 
     private
@@ -94,13 +108,14 @@ NINE
     end
 
     def verify_checksum
-      puts parsed_array
-      return false if parsed_array.any?(&:nil?)
+      return :parse_error if parsed_array.any?(&:nil?)
 
-      Vector.elements(parsed_array.reverse)
-            .inner_product((1..9).to_a)
-            .modulo(11)
-            .zero?
+      valid_checksum = Vector.elements(parsed_array.reverse)
+                             .inner_product((1..9).to_a)
+                             .modulo(11)
+                             .zero?
+
+      valid_checksum ? :valid : :invalid_checksum
     end
   end
 end
